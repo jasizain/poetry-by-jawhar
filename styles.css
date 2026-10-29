@@ -370,3 +370,54 @@ h1 em, h2 em, .wordmark em { font-style: italic; color: var(--accent-strong); }
   .deck, .stack-bottom span { animation: none; }
   * { transition-duration: 0s !important; }
 }
+
+/* Motion sections: poster stack + moodboard reveal (between Looks and the pack) */
+.motion { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; padding: 72px 16px 96px; }
+.motion .eyebrow { position: relative; z-index: 1; margin: 0; }
+.motion-posters { margin-top: 112px; background: var(--paper-2); }
+.motion-mood { background: #ece8e0; }
+.motion-mood + .pack { margin-top: 0; }
+
+/* Poster stack: front poster in the middle, the rest peek out above and below */
+.posters { position: relative; width: min(300px, 70vw); aspect-ratio: 3 / 4; margin: 130px 0 110px; }
+.poster {
+  position: absolute; inset: 0; overflow: hidden; border-radius: 3px; background: center / cover;
+  box-shadow: 0 1px 0 rgba(0, 0, 0, .08); will-change: transform;
+  transition: transform .7s cubic-bezier(.65, 0, .25, 1), opacity .7s ease;
+}
+.p-top { position: absolute; top: 0; left: 0; right: 0; height: 13%; display: grid; place-items: center; background: #fff; font-family: var(--serif); font-size: 15px; }
+.p-top em { color: var(--accent-strong); }
+.p-words { position: absolute; inset: 6%; display: flex; flex-direction: column; justify-content: space-between; color: rgba(255, 255, 255, .9); font-family: var(--classic); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+.p-words span, .p-foot { display: flex; justify-content: space-between; }
+.p-words b, .p-foot b { font-weight: 500; }
+.p-foot { position: absolute; left: 0; right: 0; bottom: 0; height: 12%; align-items: center; padding: 0 8%; background: #4d5a3a; color: #e7e1d0; font-family: var(--classic); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
+
+/* Moodboard reveal: prints pin up one by one on textured paper, then vanish */
+.motion-mood::before { /* paper grain */
+  content: ""; position: absolute; inset: 0; opacity: .35; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
+}
+.board { position: relative; width: min(440px, 86vw); margin-top: 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.tile {
+  --r: 0deg;
+  position: relative; aspect-ratio: 3 / 4; background: center / cover;
+  box-shadow: 0 2px 3px rgba(0, 0, 0, .18), 0 8px 18px rgba(0, 0, 0, .12);
+  opacity: 0; transform: translateY(-6px) scale(.96) rotate(var(--r));
+  transition: opacity .35s ease, transform .45s cubic-bezier(.2, .8, .2, 1);
+}
+.tile:nth-child(odd) { --r: -.5deg; }
+.tile:nth-child(even) { --r: .5deg; }
+.tile.show { opacity: 1; transform: rotate(var(--r)); }
+.tile::after { /* pin */
+  content: ""; position: absolute; top: 5px; left: 50%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%;
+  background: radial-gradient(circle at 35% 35%, #fff, #cfc8bb 60%, #9c9486); box-shadow: 0 1px 2px rgba(0, 0, 0, .35);
+}
+
+@media (max-width: 640px) {
+  .motion-posters { margin-top: 80px; }
+  .posters { margin: 120px 0 100px; }
+  .board { gap: 8px; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .tile { opacity: 1; transform: rotate(var(--r)); }
+}

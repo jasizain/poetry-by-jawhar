@@ -144,9 +144,58 @@ function initHeroDeck() {
   }, HERO_INTERVAL);
 }
 
+// ---- Poster stack: front card in the middle, others peek above/below ----
+function initPosterStack() {
+  const stack = $("[data-poster-stack]");
+  if (!stack) return;
+  const cards = $$(".poster", stack);
+  const n = cards.length, STEP = 34, INTERVAL = 1200; // STEP = px each card behind peeks out
+  let front = 0;
+  let paused = false;
+
+  const layout = () => cards.forEach((c, i) => {
+    let d = (i - front + n) % n;   // 0 = front card
+    if (d > n / 2) d -= n;         // half the deck above, half below
+    const a = Math.abs(d);
+    c.style.zIndex = 100 - a;
+    c.style.transform = `translateY(${d * STEP}px) scale(${1 - a * 0.07})`;
+    c.style.opacity = a > 3 ? 0 : 1;
+  });
+
+  stack.addEventListener("pointerenter", () => { paused = true; });
+  stack.addEventListener("pointerleave", () => { paused = false; });
+  layout();
+  setInterval(() => {
+    if (paused || document.hidden) return;
+    front = (front + 1) % n;
+    layout();
+  }, INTERVAL);
+}
+
+// ---- Moodboard reveal: pin up in a snake, vanish at random, repeat ----
+async function initMoodboard() {
+  const board = $("[data-moodboard]");
+  if (!board) return;
+  const tiles = $$(".tile", board);
+  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
+    tiles.forEach((t) => t.classList.add("show"));
+    return;
+  }
+  const order = [0, 1, 2, 5, 4, 3, 6, 7, 8]; // row 1 left→right, row 2 right→left, row 3 left→right
+  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
+  for (;;) {
+    for (const i of order) { tiles[i].classList.add("show"); await wait(260); }
+    await wait(2200);
+    for (const i of [...order].sort(() => Math.random() - 0.5)) { tiles[i].classList.remove("show"); await wait(140); }
+    await wait(600);
+  }
+}
+
 // ---- Init ----
 renderLooks();
 initHeroDeck();
+initPosterStack();
+initMoodboard();
 $$("[data-ba]").forEach(initSlider);
 $$("[data-price]").forEach((el) => { el.textContent = money(PACK.price); });
 $$("[data-buy]").forEach((a) => { a.href = buyUrl(); });
