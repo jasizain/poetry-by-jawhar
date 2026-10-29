@@ -94,57 +94,7 @@ function initSlider(el) {
   set(50);
 }
 
-// ---- Hero: deck of colour edits; a new photo rises to the front every few seconds ----
-const HERO_INTERVAL = 3000;
-
-function initHeroDeck() {
-  const deck = $("[data-hero-deck]");
-  if (!deck) return;
-  const caption = $("[data-hero-caption]");
-  const count = $("[data-hero-count]");
-  const looks = LOOKS.filter((l) => l.id !== "monochrome-poem"); // colour photos only
-
-  // The first photo is already in the HTML; add the rest behind it
-  const cards = [$("img", deck), ...looks.slice(1).map((l) => {
-    const img = document.createElement("img");
-    img.src = `images/${l.id}-after.jpg`;
-    img.alt = `${l.title}, edited with the ${PACK.name}`;
-    img.width = 1000; img.height = 1500;
-    deck.appendChild(img);
-    return img;
-  })];
-  cards.forEach((c, i) => { c.dataset.look = i; });
-
-  // order[0] is the front card; the rest step back (positions above 3 stay hidden)
-  let order = [...cards];
-  const place = () => order.forEach((c, i) => { c.dataset.pos = Math.min(i, 3); });
-  place();
-
-  const label = (i) => {
-    caption.style.opacity = 0;
-    setTimeout(() => {
-      caption.textContent = looks[i].title;
-      count.textContent = String(i + 1).padStart(2, "0");
-      caption.style.opacity = 1;
-    }, 250);
-  };
-
-  let paused = false;
-  deck.addEventListener("pointerenter", () => { paused = true; });
-  deck.addEventListener("pointerleave", () => { paused = false; });
-
-  setInterval(() => {
-    if (paused || document.hidden) return;
-    const next = order.pop();          // the card furthest back comes to the front
-    next.dataset.pos = "enter";        // jump below the deck without animating
-    void next.offsetWidth;
-    order.unshift(next);
-    place();
-    label(Number(next.dataset.look));
-  }, HERO_INTERVAL);
-}
-
-// ---- Poster stack: front card in the middle, others peek above/below ----
+// ---- Hero poster stack: front photo in the middle, others peek above/below ----
 function initPosterStack() {
   const stack = $("[data-poster-stack]");
   if (!stack) return;
@@ -172,30 +122,9 @@ function initPosterStack() {
   }, INTERVAL);
 }
 
-// ---- Moodboard reveal: pin up in a snake, vanish at random, repeat ----
-async function initMoodboard() {
-  const board = $("[data-moodboard]");
-  if (!board) return;
-  const tiles = $$(".tile", board);
-  if (matchMedia("(prefers-reduced-motion: reduce)").matches) {
-    tiles.forEach((t) => t.classList.add("show"));
-    return;
-  }
-  const order = [0, 1, 2, 5, 4, 3, 6, 7, 8]; // row 1 left→right, row 2 right→left, row 3 left→right
-  const wait = (ms) => new Promise((r) => setTimeout(r, ms));
-  for (;;) {
-    for (const i of order) { tiles[i].classList.add("show"); await wait(260); }
-    await wait(2200);
-    for (const i of [...order].sort(() => Math.random() - 0.5)) { tiles[i].classList.remove("show"); await wait(140); }
-    await wait(600);
-  }
-}
-
 // ---- Init ----
 renderLooks();
-initHeroDeck();
 initPosterStack();
-initMoodboard();
 $$("[data-ba]").forEach(initSlider);
 $$("[data-price]").forEach((el) => { el.textContent = money(PACK.price); });
 $$("[data-buy]").forEach((a) => { a.href = buyUrl(); });

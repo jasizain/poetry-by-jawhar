@@ -141,35 +141,6 @@ h1 em, h2 em, .wordmark em { font-style: italic; color: var(--accent-strong); }
 .hero-points { list-style: none; padding: 0; margin: 0; display: flex; flex-wrap: wrap; gap: 8px 24px; font-size: 14px; color: var(--ink-soft); }
 .hero-points li::before { content: "✦"; color: var(--accent); margin-right: 8px; font-size: 11px; }
 .hero-media { margin: 0; width: 100%; max-width: 440px; justify-self: end; }
-.hero-media figcaption { margin-top: 14px; font-size: 13px; color: var(--ink-soft); text-align: center; }
-.hero-media figcaption em { font-family: var(--serif); font-size: 17px; color: var(--ink); transition: opacity .4s ease; }
-.hero-media figcaption [data-hero-count] { font-variant-numeric: lining-nums tabular-nums; letter-spacing: .08em; }
-
-/* Hero stack: a deck of photos. The front card rises in from below every few seconds and the
-   previous ones move back, peeking out above it; coloured slabs sit underneath. */
-.hero-stack { display: flex; flex-direction: column; align-items: center; }
-.deck { position: relative; width: 100%; aspect-ratio: 4 / 4.6; margin-top: 60px; animation: rise 1s cubic-bezier(.2, .8, .2, 1) both; }
-.deck img {
-  position: absolute; inset: 0; width: 100%; height: 100%; object-fit: cover; border-radius: 6px;
-  transform-origin: top center;
-  transition: transform .9s cubic-bezier(.65, 0, .35, 1), opacity .9s ease, filter .9s ease;
-}
-.deck img[data-pos="0"] { z-index: 5; }
-.deck img[data-pos="1"] { z-index: 4; transform: translateY(-28px) scale(.9); filter: brightness(.9); }
-.deck img[data-pos="2"] { z-index: 3; transform: translateY(-54px) scale(.8); filter: brightness(.8); }
-.deck img[data-pos="3"] { z-index: 2; transform: translateY(-64px) scale(.72); opacity: 0; }
-.deck img[data-pos="enter"] { z-index: 6; transform: translateY(48px) scale(1.04); opacity: 0; transition: none; }
-.stack-bottom { display: flex; flex-direction: column; align-items: center; width: 100%; }
-.stack-bottom span { display: block; animation: rise .8s cubic-bezier(.2, .8, .2, 1) both; }
-.stack-bottom span:nth-child(1) { width: 92%; height: 40px; background: center 70% / cover; animation-delay: .25s; }
-.stack-bottom .slab-brown { width: 80%; height: 30px; background: var(--accent); animation-delay: .4s; }
-.stack-bottom .slab-olive {
-  width: 68%; height: 44px; display: flex; justify-content: space-between; align-items: center; padding: 0 16px;
-  background: #8c8466; color: #fff; font-family: var(--classic); font-size: 11px; letter-spacing: .16em; text-transform: uppercase;
-  animation-delay: .55s;
-}
-.stack-bottom .slab-olive em { font-style: normal; }
-@keyframes rise { from { opacity: 0; transform: translateY(18px); } }
 
 /* Before / After slider */
 .ba {
@@ -367,13 +338,10 @@ h1 em, h2 em, .wordmark em { font-style: italic; color: var(--accent-strong); }
 @media (prefers-reduced-motion: reduce) {
   html { scroll-behavior: auto; }
   .ribbon-track { animation: none; }
-  .deck, .stack-bottom span { animation: none; }
   * { transition-duration: 0s !important; }
 }
 
-/* Hero animation previews: poster stack / moodboard reveal (keep the chosen one, delete the other) */
-
-/* Poster stack: front poster in the middle, the rest peek out above and below */
+/* Hero poster stack: the front photo sits in the middle, the rest peek out above and below */
 .poster-stage { display: grid; place-items: center; padding: 110px 0; }
 .posters { position: relative; width: min(300px, 70vw); aspect-ratio: 3 / 4; }
 .poster {
@@ -381,43 +349,7 @@ h1 em, h2 em, .wordmark em { font-style: italic; color: var(--accent-strong); }
   box-shadow: 0 1px 0 rgba(0, 0, 0, .08); will-change: transform;
   transition: transform .7s cubic-bezier(.65, 0, .25, 1), opacity .7s ease;
 }
-.p-top { position: absolute; top: 0; left: 0; right: 0; height: 13%; display: grid; place-items: center; background: #fff; font-family: var(--serif); font-size: 15px; }
-.p-top em { color: var(--accent-strong); }
-.p-words { position: absolute; inset: 6%; display: flex; flex-direction: column; justify-content: space-between; color: rgba(255, 255, 255, .9); font-family: var(--classic); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
-.p-words span, .p-foot { display: flex; justify-content: space-between; }
-.p-words b, .p-foot b { font-weight: 500; }
-.p-foot { position: absolute; left: 0; right: 0; bottom: 0; height: 12%; align-items: center; padding: 0 8%; background: #4d5a3a; color: #e7e1d0; font-family: var(--classic); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
 
-/* Moodboard reveal: prints pin up one by one on textured paper, then vanish */
-.mood-stage { position: relative; overflow: hidden; max-width: 480px; padding: 44px 30px; border-radius: var(--radius); background: #ece8e0; }
-.mood-stage::before { /* paper grain */
-  content: ""; position: absolute; inset: 0; opacity: .35; pointer-events: none;
-  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
-}
-.board { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
-.tile {
-  --r: 0deg;
-  position: relative; aspect-ratio: 3 / 4; background: center / cover;
-  box-shadow: 0 2px 3px rgba(0, 0, 0, .18), 0 8px 18px rgba(0, 0, 0, .12);
-  opacity: 0; transform: translateY(-6px) scale(.96) rotate(var(--r));
-  transition: opacity .35s ease, transform .45s cubic-bezier(.2, .8, .2, 1);
-}
-.tile:nth-child(odd) { --r: -.5deg; }
-.tile:nth-child(even) { --r: .5deg; }
-.tile.show { opacity: 1; transform: rotate(var(--r)); }
-.tile::after { /* pin */
-  content: ""; position: absolute; top: 5px; left: 50%; width: 8px; height: 8px; margin-left: -4px; border-radius: 50%;
-  background: radial-gradient(circle at 35% 35%, #fff, #cfc8bb 60%, #9c9486); box-shadow: 0 1px 2px rgba(0, 0, 0, .35);
-}
-
-@media (max-width: 960px) {
-  .mood-stage { justify-self: center; }
-}
 @media (max-width: 640px) {
   .poster-stage { padding: 100px 0; }
-  .mood-stage { padding: 30px 16px; }
-  .board { gap: 8px; }
-}
-@media (prefers-reduced-motion: reduce) {
-  .tile { opacity: 1; transform: rotate(var(--r)); }
 }
