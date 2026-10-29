@@ -3,13 +3,14 @@ const WHATSAPP_NUMBER = "919645705564";
 const PACK = { name: "Poetry Preset Pack", price: 2499 };
 const CURRENCY = "₹";
 
-// Example photos shown in the "Looks" grid (images/<id>-before.jpg and -after.jpg)
+// Example photos shown in the "Looks" grid (images/<id>-before.jpg and -after.jpg).
+// pos = which part of the photo stays in the 4:5 frame (default: centre)
 const LOOKS = [
-  { id: "ivory-gold", title: "Golden ceremony", desc: "Silk, temple gold and soft daylight. Warm, with natural skin tones." },
-  { id: "riverside-film", title: "Riverside haze", desc: "Soft and filmic for hazy outdoor light." },
+  { id: "ivory-gold", pos: "center 8%", title: "Golden ceremony", desc: "Silk, temple gold and soft daylight. Warm, with natural skin tones." },
+  { id: "riverside-film", pos: "center 95%", title: "Riverside haze", desc: "Soft and filmic for hazy outdoor light." },
   { id: "monochrome-poem", title: "Black & white", desc: "Deep contrast and fine grain for emotional portraits." },
   { id: "forest-moody", title: "Forest greens", desc: "Rich greens and reds in shaded, leafy places." },
-  { id: "blush-heirloom", title: "Pastel reception", desc: "Clean whites and gentle blush on ivory outfits." },
+  { id: "blush-heirloom", pos: "center 15%", title: "Pastel reception", desc: "Clean whites and gentle blush on ivory outfits." },
 ];
 
 // ---- Helpers ----
@@ -27,8 +28,8 @@ function renderLooks() {
   $("[data-looks]").innerHTML = LOOKS.map((l) => `
     <article class="card">
       <div class="ba" data-ba>
-        <img class="ba-after" src="images/${l.id}-after.jpg" alt="${l.title}, edited with the ${PACK.name}" loading="lazy" width="1000" height="1500">
-        <img class="ba-before" src="images/${l.id}-before.jpg" alt="" aria-hidden="true" loading="lazy" width="1000" height="1500">
+        <img class="ba-after" style="object-position: ${l.pos || "center"}" src="images/${l.id}-after.jpg" alt="${l.title}, edited with the ${PACK.name}" loading="lazy" width="1000" height="1500">
+        <img class="ba-before" style="object-position: ${l.pos || "center"}" src="images/${l.id}-before.jpg" alt="" aria-hidden="true" loading="lazy" width="1000" height="1500">
         <span class="ba-tag ba-tag-before">Before</span>
         <span class="ba-tag ba-tag-after">After</span>
         <span class="ba-handle" role="slider" tabindex="0" aria-label="${l.title} before and after" aria-valuemin="0" aria-valuemax="100" aria-valuenow="50"></span>
