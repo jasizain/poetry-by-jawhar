@@ -94,53 +94,59 @@ function initSlider(el) {
   set(50);
 }
 
-// ---- Hero: rotate through the looks every few seconds ----
+// ---- Hero: deck of colour edits; a new photo rises to the front every few seconds ----
 const HERO_INTERVAL = 3000;
 
-function initHeroRotation() {
-  const ba = $("[data-hero-ba]");
+function initHeroDeck() {
+  const deck = $("[data-hero-deck]");
+  if (!deck) return;
   const caption = $("[data-hero-caption]");
-  const first = $(".ba-layer", ba);
-  const handle = $(".ba-handle", ba);
+  const count = $("[data-hero-count]");
+  const looks = LOOKS.filter((l) => l.id !== "monochrome-poem"); // colour photos only
 
-  // The first look is already in the HTML; add the rest as hidden layers
-  const layers = [first, ...LOOKS.slice(1).map((l) => {
-    const layer = document.createElement("div");
-    layer.className = "ba-layer";
-    layer.innerHTML = `
-      <img class="ba-after" src="images/${l.id}-after.jpg" alt="${l.title}, edited with the ${PACK.name}" width="1000" height="1500">
-      <img class="ba-before" src="images/${l.id}-before.jpg" alt="" aria-hidden="true" width="1000" height="1500">`;
-    first.parentNode.insertBefore(layer, $(".ba-tag", ba));
-    return layer;
+  // The first photo is already in the HTML; add the rest behind it
+  const cards = [$("img", deck), ...looks.slice(1).map((l) => {
+    const img = document.createElement("img");
+    img.src = `images/${l.id}-after.jpg`;
+    img.alt = `${l.title}, edited with the ${PACK.name}`;
+    img.width = 1000; img.height = 1500;
+    deck.appendChild(img);
+    return img;
   })];
+  cards.forEach((c, i) => { c.dataset.look = i; });
 
-  let index = 0;
-  let paused = false;
+  // order[0] is the front card; the rest step back (positions above 3 stay hidden)
+  let order = [...cards];
+  const place = () => order.forEach((c, i) => { c.dataset.pos = Math.min(i, 3); });
+  place();
 
-  const show = (i) => {
-    layers[index].classList.remove("is-active");
-    index = i;
-    layers[index].classList.add("is-active");
+  const label = (i) => {
     caption.style.opacity = 0;
-    setTimeout(() => { caption.textContent = LOOKS[index].title; caption.style.opacity = 1; }, 200);
+    setTimeout(() => {
+      caption.textContent = looks[i].title;
+      count.textContent = String(i + 1).padStart(2, "0");
+      caption.style.opacity = 1;
+    }, 250);
   };
 
-  // Don't switch photos while someone is comparing
-  ba.addEventListener("pointerenter", () => { paused = true; });
-  ba.addEventListener("pointerleave", () => { paused = false; });
-  ba.addEventListener("pointerdown", () => { paused = true; });
-  ba.addEventListener("pointerup", (e) => { if (e.pointerType !== "mouse") paused = false; });
-  handle.addEventListener("focus", () => { paused = true; });
-  handle.addEventListener("blur", () => { paused = false; });
+  let paused = false;
+  deck.addEventListener("pointerenter", () => { paused = true; });
+  deck.addEventListener("pointerleave", () => { paused = false; });
 
   setInterval(() => {
-    if (!paused && !document.hidden) show((index + 1) % layers.length);
+    if (paused || document.hidden) return;
+    const next = order.pop();          // the card furthest back comes to the front
+    next.dataset.pos = "enter";        // jump below the deck without animating
+    void next.offsetWidth;
+    order.unshift(next);
+    place();
+    label(Number(next.dataset.look));
   }, HERO_INTERVAL);
 }
 
 // ---- Init ----
 renderLooks();
-initHeroRotation();
+initHeroDeck();
 $$("[data-ba]").forEach(initSlider);
 $$("[data-price]").forEach((el) => { el.textContent = money(PACK.price); });
 $$("[data-buy]").forEach((a) => { a.href = buyUrl(); });
