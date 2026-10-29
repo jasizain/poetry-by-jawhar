@@ -40,7 +40,7 @@ function renderLooks() {
     </article>`).join("") + `
     <div class="pack-tile">
       <blockquote class="pack-tile-quote">
-        <p>“Every photograph holds a memory.<br><span class="q-alt">Every tone tells its story.</span><br>Now, a piece of my vision is <em>yours.</em>”</p>
+        <p>Every photograph holds a memory.<br><span class="q-alt">Every tone tells its story.</span><br>Now, a piece of my vision is <em>yours.</em></p>
         <cite>— poetry by jawhar</cite>
       </blockquote>
       <div class="pack-tile-main">
