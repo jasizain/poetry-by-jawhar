@@ -60,6 +60,15 @@
   --hl: #f3b88f; --hl-ink: #4a1d0c; --footer: #2a140b;
 }
 
+/* Theme 5: Mocha — white paper, dark brown ink and band */
+[data-theme="mocha"] {
+  --paper: #ffffff; --paper-2: #f5f1ed; --card: #ffffff;
+  --ink: #2b1d14; --ink-soft: #6b5a4e; --ink-hover: #4a3326; --line: #e8e1da;
+  --accent: #8a5a3c; --accent-strong: #6e4529;
+  --band: #2b1d14; --band-ink: #ffffff; --band-soft: #d9cbbf; --band-mute: #a8968a; --band-line: #4a3729;
+  --hl: #e6c9a8; --hl-ink: #2b1d14; --footer: #1e140d;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 body {
