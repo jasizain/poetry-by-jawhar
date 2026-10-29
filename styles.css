@@ -371,15 +371,11 @@ h1 em, h2 em, .wordmark em { font-style: italic; color: var(--accent-strong); }
   * { transition-duration: 0s !important; }
 }
 
-/* Motion sections: poster stack + moodboard reveal (between Looks and the pack) */
-.motion { position: relative; overflow: hidden; display: flex; flex-direction: column; align-items: center; padding: 72px 16px 96px; }
-.motion .eyebrow { position: relative; z-index: 1; margin: 0; }
-.motion-posters { margin-top: 112px; background: var(--paper-2); }
-.motion-mood { background: #ece8e0; }
-.motion-mood + .pack { margin-top: 0; }
+/* Hero animation previews: poster stack / moodboard reveal (keep the chosen one, delete the other) */
 
 /* Poster stack: front poster in the middle, the rest peek out above and below */
-.posters { position: relative; width: min(300px, 70vw); aspect-ratio: 3 / 4; margin: 130px 0 110px; }
+.poster-stage { display: grid; place-items: center; padding: 110px 0; }
+.posters { position: relative; width: min(300px, 70vw); aspect-ratio: 3 / 4; }
 .poster {
   position: absolute; inset: 0; overflow: hidden; border-radius: 3px; background: center / cover;
   box-shadow: 0 1px 0 rgba(0, 0, 0, .08); will-change: transform;
@@ -393,11 +389,12 @@ h1 em, h2 em, .wordmark em { font-style: italic; color: var(--accent-strong); }
 .p-foot { position: absolute; left: 0; right: 0; bottom: 0; height: 12%; align-items: center; padding: 0 8%; background: #4d5a3a; color: #e7e1d0; font-family: var(--classic); font-size: 11px; letter-spacing: .14em; text-transform: uppercase; }
 
 /* Moodboard reveal: prints pin up one by one on textured paper, then vanish */
-.motion-mood::before { /* paper grain */
+.mood-stage { position: relative; overflow: hidden; max-width: 480px; padding: 44px 30px; border-radius: var(--radius); background: #ece8e0; }
+.mood-stage::before { /* paper grain */
   content: ""; position: absolute; inset: 0; opacity: .35; pointer-events: none;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='160' height='160'%3E%3Cfilter id='n'%3E%3CfeTurbulence baseFrequency='.9' numOctaves='2'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23n)' opacity='.25'/%3E%3C/svg%3E");
 }
-.board { position: relative; width: min(440px, 86vw); margin-top: 40px; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
+.board { position: relative; display: grid; grid-template-columns: repeat(3, 1fr); gap: 12px; }
 .tile {
   --r: 0deg;
   position: relative; aspect-ratio: 3 / 4; background: center / cover;
@@ -413,9 +410,12 @@ h1 em, h2 em, .wordmark em { font-style: italic; color: var(--accent-strong); }
   background: radial-gradient(circle at 35% 35%, #fff, #cfc8bb 60%, #9c9486); box-shadow: 0 1px 2px rgba(0, 0, 0, .35);
 }
 
+@media (max-width: 960px) {
+  .mood-stage { justify-self: center; }
+}
 @media (max-width: 640px) {
-  .motion-posters { margin-top: 80px; }
-  .posters { margin: 120px 0 100px; }
+  .poster-stage { padding: 100px 0; }
+  .mood-stage { padding: 30px 16px; }
   .board { gap: 8px; }
 }
 @media (prefers-reduced-motion: reduce) {
