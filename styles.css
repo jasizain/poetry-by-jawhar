@@ -115,7 +115,7 @@ h1 em, h2 em, .wordmark em { font-style: italic; color: var(--accent-strong); }
 
 /* Header */
 .site-header {
-  position: sticky; top: 0; z-index: 30;
+  position: sticky; top: 0; z-index: 50;
   background: color-mix(in srgb, var(--paper) 88%, transparent);
   backdrop-filter: blur(10px); -webkit-backdrop-filter: blur(10px);
   border-bottom: 1px solid var(--line);
@@ -344,7 +344,7 @@ h1 em, h2 em, .wordmark em { font-style: italic; color: var(--accent-strong); }
 
 /* Hero poster stack: the front photo sits in the middle, the rest peek out above and below */
 .poster-stage { display: grid; place-items: center; padding: 110px 0; }
-.posters { position: relative; width: min(300px, 70vw); aspect-ratio: 3 / 4; }
+.posters { position: relative; isolation: isolate; width: min(300px, 70vw); aspect-ratio: 3 / 4; } /* keeps the cards' z-index below the sticky header */
 .poster {
   position: absolute; inset: 0; overflow: hidden; border-radius: 3px; background: center / cover;
   box-shadow: 0 1px 0 rgba(0, 0, 0, .08); will-change: transform;
