@@ -69,6 +69,15 @@
   --hl: #e6c9a8; --hl-ink: #2b1d14; --footer: #1e140d;
 }
 
+/* Theme 6: Classic — black and white */
+[data-theme="classic"] {
+  --paper: #ffffff; --paper-2: #f4f4f2; --card: #ffffff;
+  --ink: #111111; --ink-soft: #5a5a5a; --ink-hover: #333333; --line: #e3e3e3;
+  --accent: #8c8c8c; --accent-strong: #3d3d3d;
+  --band: #111111; --band-ink: #ffffff; --band-soft: #cfcfcf; --band-mute: #9a9a9a; --band-line: #2e2e2e;
+  --hl: #e8e8e8; --hl-ink: #111111; --footer: #0a0a0a;
+}
+
 *, *::before, *::after { box-sizing: border-box; }
 html { scroll-behavior: smooth; scroll-padding-top: 80px; }
 body {
@@ -158,13 +167,13 @@ h1 em, h2 em, .wordmark em { font-style: italic; color: var(--accent-strong); }
 .ba-handle::after {
   content: "‹ ›"; position: absolute; top: 50%; left: 50%; transform: translate(-50%, -50%);
   width: 44px; height: 44px; border-radius: 50%;
-  background: #fff; color: #1f1a16; font-size: 18px; font-weight: 700; letter-spacing: 2px;
+  background: #fff; color: #111; font-size: 18px; font-weight: 700; letter-spacing: 2px;
   display: grid; place-items: center; box-shadow: 0 6px 18px rgba(0,0,0,.25);
 }
 .ba-tag {
   position: absolute; top: 14px; padding: 5px 11px; border-radius: 999px;
   font-size: 11px; font-weight: 700; letter-spacing: .12em; text-transform: uppercase;
-  background: rgba(20, 16, 13, .55); color: #fff; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
+  background: rgba(17, 17, 17, .55); color: #fff; backdrop-filter: blur(6px); -webkit-backdrop-filter: blur(6px);
   pointer-events: none; transition: opacity .2s ease;
 }
 .ba-tag-before { left: 14px; }
