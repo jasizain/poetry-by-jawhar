@@ -1,5 +1,5 @@
-// ---- Store settings: edit price, pack name and contact here ----
-const WHATSAPP_NUMBER = "919645705564";
+// ---- Store settings: edit price, pack name and payment link here ----
+const PAYMENT_LINK = "https://rzp.io/rzp/lhcxs7rS"; // Razorpay payment link
 const PACK = { name: "Poetry Preset Pack", price: 2500 };
 const CURRENCY = "₹";
 
@@ -17,11 +17,6 @@ const LOOKS = [
 const $ = (s, el = document) => el.querySelector(s);
 const $$ = (s, el = document) => [...el.querySelectorAll(s)];
 const money = (n) => CURRENCY + n.toLocaleString("en-IN");
-
-const buyUrl = () => {
-  const msg = `Hi Jawhar! I'd like to buy the ${PACK.name} (${money(PACK.price)}). Please share the payment details.`;
-  return `https://wa.me/${WHATSAPP_NUMBER}?text=${encodeURIComponent(msg)}`;
-};
 
 // ---- Render looks + pack tile ----
 function renderLooks() {
@@ -50,7 +45,7 @@ function renderLooks() {
         <span class="pack-tile-rule" aria-hidden="true"></span>
         <span class="price" data-price></span>
         <p class="pack-tile-note">Mobile + Desktop · Install guide · WhatsApp help</p>
-        <a class="btn btn-ghost" href="https://wa.me/${WHATSAPP_NUMBER}" data-buy target="_blank" rel="noopener">Buy now</a>
+        <a class="btn btn-ghost" href="${PAYMENT_LINK}" data-buy target="_blank" rel="noopener">Buy now</a>
       </div>
     </div>`;
 }
@@ -128,5 +123,5 @@ renderLooks();
 initPosterStack();
 $$("[data-ba]").forEach(initSlider);
 $$("[data-price]").forEach((el) => { el.textContent = money(PACK.price); });
-$$("[data-buy]").forEach((a) => { a.href = buyUrl(); });
+$$("[data-buy]").forEach((a) => { a.href = PAYMENT_LINK; });
 $("[data-year]").textContent = new Date().getFullYear();
