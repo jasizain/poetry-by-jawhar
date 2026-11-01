@@ -1,6 +1,6 @@
 // ---- Store settings: edit price, pack name and contact here ----
 const WHATSAPP_NUMBER = "919645705564";
-const PACK = { name: "Poetry Preset Pack", price: 2499 };
+const PACK = { name: "Poetry Preset Pack", price: 2500 };
 const CURRENCY = "₹";
 
 // Example photos shown in the "Looks" grid (images/<id>-before.jpg and -after.jpg).
