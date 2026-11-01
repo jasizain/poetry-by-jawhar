@@ -90,22 +90,21 @@ function initSlider(el) {
   set(50);
 }
 
-// ---- Hero poster stack: front photo in the middle, others peek above/below ----
+// ---- Hero poster stack: front photo fades away, the next ones peek out below ----
 function initPosterStack() {
   const stack = $("[data-poster-stack]");
   if (!stack) return;
   const cards = $$(".poster", stack);
-  const n = cards.length, STEP = 34, INTERVAL = 1200; // STEP = px each card behind peeks out
+  const n = cards.length, STEP = 20, PEEK = 2, INTERVAL = 1200; // STEP = px each card behind peeks out
   let front = 0;
   let paused = false;
 
   const layout = () => cards.forEach((c, i) => {
-    let d = (i - front + n) % n;   // 0 = front card
-    if (d > n / 2) d -= n;         // half the deck above, half below
-    const a = Math.abs(d);
-    c.style.zIndex = 100 - a;
-    c.style.transform = `translateY(${d * STEP}px) scale(${1 - a * 0.07})`;
-    c.style.opacity = a > 3 ? 0 : 1;
+    const d = (i - front + n) % n;   // 0 = front card
+    const leaving = d === n - 1;     // was the front card: stays on top while it fades
+    c.style.zIndex = leaving ? 101 : 100 - d;
+    c.style.transform = `translateY(${leaving ? 0 : d * STEP}px)`;
+    c.style.opacity = d <= PEEK ? 1 : 0;
   });
 
   stack.addEventListener("pointerenter", () => { paused = true; });
